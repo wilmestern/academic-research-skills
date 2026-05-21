@@ -6,11 +6,16 @@ critical analysis, and research methodology guidance.
 
 Note: Personal fork for learning purposes. Using this to practice
 literature review workflows for my thesis research.
+
+Personal customizations:
+- Added __email__ field for contact info
+- Exposed __version__ more prominently for debugging
 """
 
 __version__ = "0.1.0"
 __author__ = "academic-research-skills contributors"
 __license__ = "MIT"
+__email__ = ""  # personal contact placeholder
 
 from .core import ResearchSkillsManager
 from .assessments import SkillAssessment
@@ -21,4 +26,5 @@ __all__ = [
     "SkillAssessment",
     "ResourceLibrary",
     "__version__",
+    "__author__",
 ]
