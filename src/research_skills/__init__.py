@@ -3,6 +3,9 @@
 This package provides tools and utilities for developing and assessing
 academic research skills, including literature review, citation management,
 critical analysis, and research methodology guidance.
+
+Note: Personal fork for learning purposes. Using this to practice
+literature review workflows for my thesis research.
 """
 
 __version__ = "0.1.0"
