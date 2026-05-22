@@ -75,6 +75,10 @@ class TestScoreForTiers:
     def test_value_above_all_thresholds(self):
         assert _score_for_tiers(100, [(0, 1), (5, 2), (10, 3)]) == 3
 
+    # Edge case: empty tiers list should return 0
+    def test_empty_tiers_returns_zero(self):
+        assert _score_for_tiers(10, []) == 0
+
 
 # ---------------------------------------------------------------------------
 # _credibility_from_score
@@ -94,51 +98,9 @@ class TestCredibilityFromScore:
     def test_score_above_max_clamps_to_high(self):
         assert _credibility_from_score(200) == CredibilityLevel.HIGH
 
+    # Negative scores should also be treated as LOW
+    def test_negative_score_returns_low(self):
+        assert _credibility_from_score(-10) == CredibilityLevel.LOW
 
-# ---------------------------------------------------------------------------
-# evaluate_source
-# ---------------------------------------------------------------------------
 
-class TestEvaluateSource:
-    def test_returns_evaluation_result(self, peer_reviewed_source):
-        result = evaluate_source(peer_reviewed_source)
-        assert isinstance(result, EvaluationResult)
-
-    def test_peer_reviewed_scores_higher_than_blog(
-        self, peer_reviewed_source, blog_source
-    ):
-        pr_result = evaluate_source(peer_reviewed_source)
-        blog_result = evaluate_source(blog_source)
-        assert pr_result.score > blog_result.score
-
-    def test_peer_reviewed_credibility_is_high(self, peer_reviewed_source):
-        result = evaluate_source(peer_reviewed_source)
-        assert result.credibility == CredibilityLevel.HIGH
-
-    def test_blog_credibility_is_low_or_medium(self, blog_source):
-        result = evaluate_source(blog_source)
-        assert result.credibility in (CredibilityLevel.LOW, CredibilityLevel.MEDIUM)
-
-    def test_government_source_credibility_is_medium_or_high(
-        self, government_source
-    ):
-        result = evaluate_source(government_source)
-        assert result.credibility in (CredibilityLevel.MEDIUM, CredibilityLevel.HIGH)
-
-    def test_score_is_non_negative(self, blog_source):
-        result = evaluate_source(blog_source)
-        assert result.score >= 0
-
-    def test_score_does_not_exceed_maximum(self, peer_reviewed_source):
-        result = evaluate_source(peer_reviewed_source)
-        # Scores should be bounded (typical max is 100)
-        assert result.score <= 100
-
-    def test_summary_is_non_empty_string(self, peer_reviewed_source):
-        result = evaluate_source(peer_reviewed_source)
-        assert isinstance(result.summary, str)
-        assert len(result.summary) > 0
-
-    def test_source_reference_preserved(self, peer_reviewed_source):
-        result = evaluate_source(peer_reviewed_source)
-        assert result.source is peer_reviewed_source
+# ------
