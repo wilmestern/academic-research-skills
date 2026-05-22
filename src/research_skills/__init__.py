@@ -12,6 +12,7 @@ Personal customizations:
 - Exposed __version__ more prominently for debugging
 - Added __email__ to __all__ for consistency
 - Fixed: __email__ was missing from __all__ despite being a public attribute
+- Added __license__ to __all__ for completeness
 """
 
 __version__ = "0.1.0"
@@ -29,5 +30,6 @@ __all__ = [
     "ResourceLibrary",
     "__version__",
     "__author__",
+    "__license__",  # added: useful to expose for downstream consumers
     "__email__",
 ]
