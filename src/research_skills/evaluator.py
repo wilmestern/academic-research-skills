@@ -88,17 +88,18 @@ def _score_for_tiers(value: float, tiers: list[tuple[float, float]]) -> float:
 
 
 def _credibility_from_score(score: float) -> CredibilityLevel:
-    """Map a numeric score to a CredibilityLevel enum value."""
+    """Map a numeric score to a CredibilityLevel enum value.
+
+    Thresholds:
+        >= 0.80  -> HIGH
+        >= 0.55  -> MEDIUM
+        >= 0.30  -> LOW
+        <  0.30  -> VERY_LOW
+    """
     if score >= 0.80:
         return CredibilityLevel.HIGH
     if score >= 0.55:
         return CredibilityLevel.MEDIUM
     if score >= 0.30:
         return CredibilityLevel.LOW
-    return CredibilityLevel.UNRELIABLE
-
-
-def evaluate_source(source: ResearchSource) -> EvaluationResult:
-    """Evaluate a single :class:`ResearchSource` and return an :class:`EvaluationResult`.
-
-    Paramete
+    return CredibilityLevel.VERY_LOW
