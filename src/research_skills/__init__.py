@@ -10,6 +10,8 @@ literature review workflows for my thesis research.
 Personal customizations:
 - Added __email__ field for contact info
 - Exposed __version__ more prominently for debugging
+- Added __email__ to __all__ for consistency
+- Fixed: __email__ was missing from __all__ despite being a public attribute
 """
 
 __version__ = "0.1.0"
@@ -27,4 +29,5 @@ __all__ = [
     "ResourceLibrary",
     "__version__",
     "__author__",
+    "__email__",
 ]
