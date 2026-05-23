@@ -105,6 +105,8 @@ def format_results_csv(results: Sequence[EvaluationResult]) -> str:
         "credibility_level",
         "flags",
         "summary",
+        # url is handy to have when reviewing sources in a spreadsheet
+        "url",
     ]
 
     output = io.StringIO()
@@ -121,5 +123,6 @@ def format_results_csv(results: Sequence[EvaluationResult]) -> str:
             "credibility_level": result.credibility_level.value,
             "flags": "; ".join(result.flags),
             "summary": result.summary,
+            "url": source.url or "",
         })
     return output.getvalue()
