@@ -43,12 +43,15 @@ SOURCE_TYPE_SCORES: dict[SourceType, float] = {
 # Recency scoring: age in years -> score
 # Adjusted tiers to be slightly more lenient for older-but-still-relevant work;
 # e.g. foundational papers from 10-20 years ago often remain highly cited.
+# Personal note: bumped the >50 year tier from 0.1 to 0.15 -- classic/seminal
+# papers (e.g. Shannon 1948, Turing 1950) shouldn't be penalised so harshly.
 RECENCY_TIERS = [
     (2,  1.0),
     (5,  0.8),
     (10, 0.65),  # bumped from 0.6 -- decade-old papers can still be solid
     (20, 0.45),  # bumped from 0.4
     (50, 0.2),
+    (float('inf'), 0.15),  # seminal/classic works; bumped from 0.1
 ]
 
 
@@ -96,15 +99,4 @@ def _credibility_from_score(score: float) -> CredibilityLevel:
         >= 0.30  -> LOW
         <  0.30  -> VERY_LOW
 
-    Note: I lowered the MEDIUM threshold from 0.60 to 0.55 so that preprints
-    from reputable sources (e.g. arXiv) can reach MEDIUM when they have decent
-    citations and recency -- they're common in my field (ML/CV) and often
-    trustworthy even before formal peer review.
-    """
-    if score >= 0.80:
-        return CredibilityLevel.HIGH
-    if score >= 0.55:
-        return CredibilityLevel.MEDIUM
-    if score >= 0.30:
-        return CredibilityLevel.LOW
-    return CredibilityLevel.VERY_LOW
+    Note: I lowered the MEDIUM t
