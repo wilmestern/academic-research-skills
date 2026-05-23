@@ -70,8 +70,13 @@ class ResearchSource:
 
     @property
     def is_recent(self) -> bool:
-        """Return True if the source was published within the last 5 years."""
-        return self.age_years <= 5
+        """Return True if the source was published within the last 10 years.
+
+        Note: Changed threshold from 5 to 10 years to better suit my field
+        (historical research), where sources from the past decade are still
+        considered current.
+        """
+        return self.age_years <= 10
 
     def to_apa(self) -> str:
         """Generate a basic APA 7th edition citation string."""
@@ -95,55 +100,4 @@ class ResearchSource:
         formatted: list[str] = []
         for author in self.authors:
             parts = author.strip().split()
-            if len(parts) >= 2:
-                last = parts[-1]
-                initials = ". ".join(p[0].upper() for p in parts[:-1]) + "."
-                formatted.append(f"{last}, {initials}")
-            else:
-                formatted.append(author)
-
-        if len(formatted) == 1:
-            return formatted[0]
-        if len(formatted) == 2:
-            return f"{formatted[0]}, & {formatted[1]}"
-        return ", ".join(formatted[:-1]) + f", & {formatted[-1]}"
-
-
-def evaluate_source_credibility(source: ResearchSource) -> CredibilityLevel:
-    """Heuristically evaluate the credibility of a research source.
-
-    Args:
-        source: The ResearchSource to evaluate.
-
-    Returns:
-        A CredibilityLevel based on available metadata.
-    """
-    score = 0
-
-    # Peer-reviewed source types score higher
-    if source.source_type in (SourceType.JOURNAL_ARTICLE, SourceType.CONFERENCE_PAPER):
-        score += 3
-    elif source.source_type in (SourceType.BOOK, SourceType.BOOK_CHAPTER, SourceType.THESIS):
-        score += 2
-    elif source.source_type == SourceType.REPORT:
-        score += 1
-
-    # DOI presence suggests formal publication
-    if source.doi and re.match(r"^10\.\d{4,}/", source.doi):
-        score += 2
-
-    # Recency adds credibility in fast-moving fields
-    if source.is_recent:
-        score += 1
-
-    # Abstract and keywords indicate thorough metadata
-    if source.abstract:
-        score += 1
-    if source.keywords:
-        score += 1
-
-    if score >= 6:
-        return CredibilityLevel.HIGH
-    if score >= 3:
-        return CredibilityLevel.MEDIUM
-    return CredibilityLevel.LOW
+            if len(par
