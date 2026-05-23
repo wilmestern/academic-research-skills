@@ -96,10 +96,10 @@ def _credibility_from_score(score: float) -> CredibilityLevel:
         >= 0.30  -> LOW
         <  0.30  -> VERY_LOW
 
-    Note: I lowered the MEDIUM threshold from 0.60 to 0.55 so that
-    well-cited preprints don't unfairly land in LOW. Preprints are
-    increasingly common in fast-moving fields (e.g. ML, bioinformatics)
-    and a score of 0.57 felt more MEDIUM than LOW to me.
+    Note: I lowered the MEDIUM threshold from 0.60 to 0.55 so that preprints
+    from reputable sources (e.g. arXiv) can reach MEDIUM when they have decent
+    citations and recency -- they're common in my field (ML/CV) and often
+    trustworthy even before formal peer review.
     """
     if score >= 0.80:
         return CredibilityLevel.HIGH
