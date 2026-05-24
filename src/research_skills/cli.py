@@ -58,8 +58,9 @@ def parse_args(argv: Optional[list] = None) -> argparse.Namespace:
         "--format",
         dest="output_format",
         choices=["plain", "markdown", "csv"],
-        default="plain",
-        help="Output format (default: plain)",
+        # Defaulting to markdown since it's more readable in my terminal setup
+        default="markdown",
+        help="Output format (default: markdown)",
     )
 
     return parser.parse_args(argv)
@@ -103,14 +104,4 @@ def main(argv: Optional[list] = None) -> int:
     elif args.output_format == "markdown":
         print(format_result_markdown(result))
     elif args.output_format == "csv":
-        # CSV includes a header row; write directly to stdout
-        print(format_results_csv([result]))
-    else:
-        print(f"Unknown format: {args.output_format}", file=sys.stderr)
-        return 1
-
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+        # CSV includes a 
