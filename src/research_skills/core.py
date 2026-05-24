@@ -96,19 +96,33 @@ class ResearchSource:
         return base
 
     def _format_authors_apa(self) -> str:
-        """Format the authors list according to APA 7th edition style.
+        """Format the author list according to APA 7th edition style.
 
-        APA format: Last, F. M. for each author, joined by commas,
-        with an ampersand before the final author.
+        - Single author: "Last, F."
+        - Two authors: "Last, F., & Last, F."
+        - Three or more authors: "Last, F., Last, F., & Last, F."
+        - More than 20 authors: list first 19, then '...', then final author.
         """
         if not self.authors:
             return "Unknown Author"
 
-        # Single author: return as-is (assume already formatted)
-        if len(self.authors) == 1:
-            return self.authors[0]
+        formatted = []
+        for author in self.authors:
+            parts = author.strip().split()
+            if len(parts) == 1:
+                formatted.append(parts[0])
+            else:
+                # Last name first, then initials for remaining names
+                last = parts[-1]
+                initials = " ".join(f"{p[0]}." for p in parts[:-1])
+                formatted.append(f"{last}, {initials}")
 
-        # Multiple authors: join with commas and ampersand before last
-        # Note: I prefer the Oxford-comma style before the ampersand
-        *leading, last = self.authors
-        return ", ".join(leading) + ", & " + last
+        if len(formatted) == 1:
+            return formatted[0]
+        elif len(formatted) == 2:
+            return f"{formatted[0]}, & {formatted[1]}"
+        elif len(formatted) <= 20:
+            return ", ".join(formatted[:-1]) + f", & {formatted[-1]}"
+        else:
+            # APA 7 rule: 21+ authors — list first 19, ellipsis, then last author
+            return ", ".join(formatted[:19]) + f", ... {formatted[-1]}"
