@@ -96,8 +96,19 @@ class ResearchSource:
         return base
 
     def _format_authors_apa(self) -> str:
-        """Format author list in APA style (Last, F. I.)."""
-        formatted: list[str] = []
-        for author in self.authors:
-            parts = author.strip().split()
-            if len(par
+        """Format the authors list according to APA 7th edition style.
+
+        APA format: Last, F. M. for each author, joined by commas,
+        with an ampersand before the final author.
+        """
+        if not self.authors:
+            return "Unknown Author"
+
+        # Single author: return as-is (assume already formatted)
+        if len(self.authors) == 1:
+            return self.authors[0]
+
+        # Multiple authors: join with commas and ampersand before last
+        # Note: I prefer the Oxford-comma style before the ampersand
+        *leading, last = self.authors
+        return ", ".join(leading) + ", & " + last
